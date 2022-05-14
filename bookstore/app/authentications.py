@@ -7,7 +7,7 @@ def get_token_header(request):
     auth = authentication.get_authorization_header(request).split()
 
     if not auth or auth[0].lower() != b'bearer':
-        msg = 'Invalid bearer header. No credentials provided.'
+        msg = 'No token provided.'
         raise exceptions.AuthenticationFailed(msg)
 
     if len(auth) == 1:
@@ -28,9 +28,9 @@ class CustomJWTAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
         token = get_token_header(request)
         decoded_token = JWTService.decode_token(token)
-        
+
         if decoded_token['token_type'] == 'refresh':
-            raise exceptions.AuthenticationFailed('Refresh token used.')
+            raise exceptions.AuthenticationFailed('Token invalid.')
 
         author_id = decoded_token['Author_ID']
         try:

@@ -135,6 +135,7 @@ REST_FRAMEWORK  = {
         'bookstore.app.configs.renderer.CustomJSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
+    'EXCEPTION_HANDLER': 'bookstore.app.configs.exception_handler.custom_exception_handler',
 }
 
 CORS_ALLOW_ALL_ORIGINS = True

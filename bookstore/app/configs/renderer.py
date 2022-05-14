@@ -7,7 +7,14 @@ class CustomJSONRenderer(JSONRenderer):
         }
         if data:
             if 'detail' in data:
-                response_data['error_key'] = data['detail']
+                error_key = None
+                if data['detail'] == 'Token expired.':
+                    error_key = 'error_expired_token'
+                elif data['detail'] == 'Token invalid.' or data['detail'].startswith('Invalid bearer header.'):
+                    error_key = 'error_invalid_token'
+                elif data['detail'] == 'No token provided.':
+                    error_key = 'error_no_auth_token'
+                response_data['error_key'] = error_key if error_key else data['detail']
                 response_data['error_message'] = data['detail']
                 response_data['error_data'] = data
             else:
