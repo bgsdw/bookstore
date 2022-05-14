@@ -29,12 +29,11 @@ class CustomJWTAuthentication(authentication.BaseAuthentication):
         token = get_token_header(request)
         decoded_token = JWTService.decode_token(token)
 
-        if decoded_token['token_type'] == 'refresh':
+        if decoded_token['token_type'] != 'access':
             raise exceptions.AuthenticationFailed('Token invalid.')
 
-        author_id = decoded_token['Author_ID']
         try:
-            author = Author.objects.get(Author_ID=author_id)
+            author = Author.objects.get(Author_ID=decoded_token['Author_ID'])
         except Author.DoesNotExist:
             raise exceptions.AuthenticationFailed('Author not found.')
 

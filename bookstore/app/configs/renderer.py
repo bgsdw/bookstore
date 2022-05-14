@@ -20,6 +20,9 @@ class CustomJSONRenderer(JSONRenderer):
                     error_key = 'error_invalid_password'
                 elif data['detail'] == 'Internal server error.':
                     error_key = 'error_internal_server'
+                elif data['detail'] == 'Not found.':
+                    error_key = 'error_id_not_found'
+                response_data['message'] = 'Failed'
                 response_data['error_key'] = error_key if error_key else data['detail']
                 response_data['error_message'] = data['detail']
                 response_data['error_data'] = data

@@ -4,7 +4,7 @@ from rest_framework import exceptions
 
 class JWTService:
     @classmethod
-    def generate_token(self, data):
+    def encode_token(self, data):
         return jwt.encode(data, 'K1K0', algorithm='HS256')
     
     @classmethod

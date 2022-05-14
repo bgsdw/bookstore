@@ -1,6 +1,6 @@
 from bookstore.app.models import Author
 from bookstore.app.serializers.author_serializer import (AuthorSerlializer, ChangePasswordSerializer, ForgotPasswordSerializer,
-                                                         LoginSerializer)
+                                                         LoginSerializer, RefreshTokenSerializer)
 from django.db.transaction import atomic
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -38,12 +38,20 @@ class AuthorViewSet(viewsets.ModelViewSet):
         serializer = ForgotPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         new_password = serializer.forgot_password(serializer.data)
-        return Response({'New_Password': new_password})
+        return Response(new_password)
 
     @atomic
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['put'])
     def change_password(self, request):
         serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.change_password(serializer.data)
         return Response()
+
+    @atomic
+    @action(detail=False, methods=['post'], authentication_classes=[])
+    def refresh_token(self, request):
+        serializer = RefreshTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        token = serializer.refresh_token(serializer.data)
+        return Response(token)
