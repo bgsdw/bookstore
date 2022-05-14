@@ -16,7 +16,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
         serializer = AuthorSerlializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response()
+        return Response({'message': 'Success'})
 
 
     @atomic
@@ -24,6 +24,6 @@ class AuthorViewSet(viewsets.ModelViewSet):
     def login(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.authenticate(serializer.data)
-        return Response()
+        token = serializer.authenticate(serializer.data)
+        return Response(token)
         

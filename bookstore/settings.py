@@ -131,6 +131,10 @@ REST_FRAMEWORK  = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'bookstore.app.authentications.CustomJWTAuthentication',
     ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'bookstore.app.configs.renderer.CustomJSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
