@@ -11,13 +11,23 @@ class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerlializer
 
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, pk=None):
+        instance = self.get_object()
+        serializer = AuthorSerlializer(instance=instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response()
+
     @atomic
     @action(detail=False, methods=['post'], authentication_classes=[])
     def register(self, request):
         serializer = AuthorSerlializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({'message': 'Success'})
+        return Response()
 
     @atomic
     @action(detail=False, methods=['post'], authentication_classes=[])
@@ -55,3 +65,18 @@ class AuthorViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         token = serializer.refresh_token(serializer.data)
         return Response(token)
+
+    @atomic
+    @action(detail=False, methods=['delete'])
+    def delete(self, request):
+        serializer = RefreshTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.delete_author(serializer.data, self.request.user)
+        return Response()
+
+    @atomic
+    @action(detail=False, methods=['get'])
+    def get_my_profile(self, request):
+        instance = self.get_object()
+        serializer = AuthorSerlializer(instance=instance)
+        return Response(serializer.data)

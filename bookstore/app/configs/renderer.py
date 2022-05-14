@@ -7,7 +7,7 @@ class CustomJSONRenderer(JSONRenderer):
         }
         if data:
             if 'detail' in data:
-                error_key = None
+                error_key = 'error_internal_server'
                 if data['detail'] == 'Token expired.':
                     error_key = 'error_expired_token'
                 elif data['detail'] == 'Refresh token expired.':
@@ -29,6 +29,14 @@ class CustomJSONRenderer(JSONRenderer):
                 response_data['message'] = 'Failed'
                 response_data['error_key'] = error_key if error_key else data['detail']
                 response_data['error_message'] = data['detail']
+                response_data['error_data'] = data
+            elif 'Email' in data and 'Error' in str(data['Email']):
+                error_key = 'error_internal_server'
+                if str(data['Email']) == "[ErrorDetail(string='author with this Email already exists.', code='unique')]":
+                    error_key = 'error_email_duplicate'
+                response_data['message'] = 'Failed'
+                response_data['error_key'] = error_key if error_key else data['Email'][0]
+                response_data['error_message'] = data['Email'][0]
                 response_data['error_data'] = data
             else:
                 response_data['data'] = data

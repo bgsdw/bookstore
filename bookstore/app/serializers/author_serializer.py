@@ -8,16 +8,23 @@ from datetime import timedelta
 
 
 class AuthorSerlializer(serializers.ModelSerializer):
-    Password = serializers.CharField(write_only=True)
-
     class Meta:
         model = Author
-        fields = '__all__'
+        exclude = ['Created_Time', 'Is_Disabled']
+        extra_kwargs = {
+            'Password': {'write_only': True},
+        }
 
     def create(self, validated_data):
         # hash the password
         validated_data['Password'] = make_password(validated_data['Password'])
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        # hash the password
+        if validated_data.get('Password'):
+            validated_data['Password'] = make_password(validated_data['Password'])
+        return super().update(instance, validated_data)
 
 
 class LoginSerializer(serializers.Serializer):
@@ -148,3 +155,12 @@ class RefreshTokenSerializer(serializers.Serializer):
             'Access_Token': access_token,
             'Refresh_Token': refresh_token,
         }
+
+    def delete_author(self, validated_data, author):
+        decoded_token = JWTService.decode_token(validated_data['Refresh_Token'], False)
+
+        if decoded_token['token_type'] != 'refresh':
+            raise exceptions.AuthenticationFailed('Refresh token invalid.')
+
+        author.Is_Disabled = True
+        author.save()
