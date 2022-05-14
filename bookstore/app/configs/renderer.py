@@ -14,6 +14,12 @@ class CustomJSONRenderer(JSONRenderer):
                     error_key = 'error_invalid_token'
                 elif data['detail'] == 'No token provided.':
                     error_key = 'error_no_auth_token'
+                elif data['detail'] == 'Author not found with this credential.':
+                    error_key = 'error_email_not_found'
+                elif data['detail'] == 'Wrong credential.':
+                    error_key = 'error_invalid_password'
+                elif data['detail'] == 'Internal server error.':
+                    error_key = 'error_internal_server'
                 response_data['error_key'] = error_key if error_key else data['detail']
                 response_data['error_message'] = data['detail']
                 response_data['error_data'] = data

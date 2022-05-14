@@ -14,6 +14,7 @@ class AuthorSerlializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
+        # hash the password
         validated_data['Password'] = make_password(validated_data['Password'])
         return super().create(validated_data)
 
@@ -33,6 +34,7 @@ class LoginSerializer(serializers.Serializer):
         if not check_password(validated_data['Password'], author.Password):
             raise exceptions.AuthenticationFailed('Wrong credential.')
 
+        # set the access token payload
         payload = {
             'Author_ID': author.Author_ID,
             'Name': author.Name,
@@ -41,8 +43,10 @@ class LoginSerializer(serializers.Serializer):
             'token_type': 'access',
             'exp': timezone.now() + timedelta(minutes=15),
         }
+        # create the access token
         access_token = JWTService.generate_token(payload)
         
+        # set the refresh token payload
         payload = {
             'Author_ID': author.Author_ID,
             'Name': author.Name,
@@ -51,9 +55,48 @@ class LoginSerializer(serializers.Serializer):
             'token_type': 'refresh',
             'exp': timezone.now() + timedelta(days=1),
         }
+        # create the refresh token
         refresh_token = JWTService.generate_token(payload)
 
+        # return the access token and refresh token
         return {
             'Access_Token': access_token,
             'Refresh_Token': refresh_token,
         }
+
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    Email = serializers.EmailField()
+
+    def forgot_password(self, validated_data):
+        # try to find the user, if no user is found, raise an error
+        try:
+            author = Author.objects.get(Email=validated_data['Email'])
+        except Author.DoesNotExist:
+            raise exceptions.AuthenticationFailed('Author not found with this credential.')
+
+        new_password = 'i0sI988as'
+        # update the author password
+        author.Password = make_password(new_password)
+        author.save()
+        # return the new password
+        return new_password
+
+class ChangePasswordSerializer(serializers.Serializer):
+    Old_Password = serializers.CharField()
+    New_Password = serializers.CharField()
+
+    def change_password(self, validated_data):
+        # try to find the user, if no user is found, raise an error
+        try:
+            author = Author.objects.get(Email=self.context['request'].user.Email)
+        except Author.DoesNotExist:
+            raise exceptions.AuthenticationFailed('Author not found with this credential.')
+
+        # check the password
+        if not check_password(validated_data['Old_Password'], author.Password):
+            raise exceptions.AuthenticationFailed('Wrong credential.')
+
+        # update the author password
+        author.Password = make_password(validated_data['New_Password'])
+        author.save()
