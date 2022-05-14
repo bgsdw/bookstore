@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import MinLengthValidator
 # Create your models here.
 
 class Author(models.Model):
@@ -7,8 +7,9 @@ class Author(models.Model):
     Name = models.CharField(max_length=255)
     Pen_Name = models.CharField(max_length=255)
     Email = models.EmailField(unique=True)
-    Is_Disabled = models.BooleanField()
-    Created_Time = models.DateTimeField()
+    Password = models.CharField(max_length=255, validators=[MinLengthValidator(8)])
+    Is_Disabled = models.BooleanField(default=False)
+    Created_Time = models.DateTimeField(auto_now_add=True)
 
 class Book(models.Model):
     Book_ID = models.AutoField(primary_key=True)
@@ -18,7 +19,7 @@ class Book(models.Model):
     Stock = models.PositiveIntegerField()
     Price = models.PositiveIntegerField()
     Cover_URL = models.CharField(max_length=255)
-    Created_Time = models.DateTimeField()
+    Created_Time = models.DateTimeField(auto_now_add=True)
 
 class Sales(models.Model):
     Sales_ID = models.AutoField(primary_key=True)
@@ -29,4 +30,4 @@ class Sales(models.Model):
     Quantity = models.PositiveIntegerField()
     Price_Per_Unit = models.PositiveIntegerField()
     Price_Total = models.PositiveIntegerField()
-    Created_Time = models.DateTimeField()
+    Created_Time = models.DateTimeField(auto_now_add=True)

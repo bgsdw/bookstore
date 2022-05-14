@@ -127,4 +127,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+REST_FRAMEWORK  = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'bookstore.app.authentications.CustomJWTAuthentication',
+    ],
+}
+
 CORS_ALLOW_ALL_ORIGINS = True

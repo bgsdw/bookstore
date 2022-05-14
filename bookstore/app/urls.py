@@ -1,4 +1,4 @@
-from bookstore.app.views.authot_view import AuthorViewSet
+from bookstore.app.views.author_view import AuthorViewSet
 from bookstore.app.views.book_view import BookViewSet
 from bookstore.app.views.sales_view import SalesViewSet
 from django.urls import include, path
