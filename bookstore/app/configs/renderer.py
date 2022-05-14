@@ -10,8 +10,12 @@ class CustomJSONRenderer(JSONRenderer):
                 error_key = None
                 if data['detail'] == 'Token expired.':
                     error_key = 'error_expired_token'
+                elif data['detail'] == 'Refresh token expired.':
+                    error_key = 'error_refresh_token_expired'
                 elif data['detail'] == 'Token invalid.' or data['detail'].startswith('Invalid bearer header.'):
                     error_key = 'error_invalid_token'
+                elif data['detail'] == 'Refresh token invalid.':
+                    error_key = 'error_refresh_token_invalid'
                 elif data['detail'] == 'No token provided.':
                     error_key = 'error_no_auth_token'
                 elif data['detail'] == 'Author not found with this credential.':

@@ -108,10 +108,10 @@ class RefreshTokenSerializer(serializers.Serializer):
     Refresh_Token = serializers.CharField()
 
     def refresh_token(self, validated_data):
-        decoded_token = JWTService.decode_token(validated_data['Refresh_Token'])
+        decoded_token = JWTService.decode_token(validated_data['Refresh_Token'], False)
 
         if decoded_token['token_type'] != 'refresh':
-            raise exceptions.AuthenticationFailed('Token invalid.')
+            raise exceptions.AuthenticationFailed('Refresh token invalid.')
         
         # try to find the user, if no user is found, raise an error
         try:
