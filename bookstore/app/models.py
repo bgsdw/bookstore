@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Author(models.Model):
-    Author_ID = models.IntegerField(primary_key=True)
+    Author_ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=255)
     Pen_Name = models.CharField(max_length=255)
     Email = models.EmailField(unique=True)
@@ -11,7 +11,7 @@ class Author(models.Model):
     Created_Time = models.DateTimeField()
 
 class Book(models.Model):
-    Book_ID = models.IntegerField(primary_key=True)
+    Book_ID = models.AutoField(primary_key=True)
     Title = models.CharField(max_length=255)
     Author_ID = models.ForeignKey(Author, on_delete=models.RESTRICT)
     Summary = models.CharField(max_length=255)
@@ -21,7 +21,7 @@ class Book(models.Model):
     Created_Time = models.DateTimeField()
 
 class Sales(models.Model):
-    Sales_ID = models.IntegerField(primary_key=True)
+    Sales_ID = models.AutoField(primary_key=True)
     Recepient_Name = models.CharField(max_length=255)
     Recepient_Email = models.CharField(max_length=255)
     Book_Title = models.CharField(max_length=255)
