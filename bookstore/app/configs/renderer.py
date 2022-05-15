@@ -43,6 +43,11 @@ class CustomJSONRenderer(JSONRenderer):
                 response_data['error_key'] = 'error_internal_server'
                 response_data['error_message'] = 'Some fields are missing.'
                 response_data['error_data'] = data
+            elif 'object does not exist.' in str(data):
+                response_data['message'] = 'Failed'
+                response_data['error_key'] = 'error_internal_server'
+                response_data['error_message'] = 'Some objects are not exist.'
+                response_data['error_data'] = data
             else:
                 response_data['data'] = data
 

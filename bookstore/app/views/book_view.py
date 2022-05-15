@@ -1,8 +1,9 @@
 from bookstore.app.models import Book
-from bookstore.app.serializers.book_serializer import BookCoverUpdateSerializer, BookSerializer, BookUpdateSerializer
+from bookstore.app.serializers.book_serializer import (
+    BookCoverUpdateSerializer, BookSerializer, BookUpdateSerializer)
 from django.db.transaction import atomic
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, viewsets, exceptions
+from rest_framework import exceptions, filters, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
