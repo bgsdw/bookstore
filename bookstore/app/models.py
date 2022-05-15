@@ -18,7 +18,7 @@ class Book(models.Model):
     Summary = models.CharField(max_length=255)
     Stock = models.PositiveIntegerField()
     Price = models.PositiveIntegerField()
-    Cover_URL = models.CharField(max_length=255)
+    Cover_URL = models.ImageField(upload_to='bookstore/app/uploads/')
     Created_Time = models.DateTimeField(auto_now_add=True)
 
 class Sales(models.Model):

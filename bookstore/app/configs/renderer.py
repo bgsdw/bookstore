@@ -38,6 +38,11 @@ class CustomJSONRenderer(JSONRenderer):
                 response_data['error_key'] = error_key if error_key else data['Email'][0]
                 response_data['error_message'] = data['Email'][0]
                 response_data['error_data'] = data
+            elif 'This field is required.' in str(data):
+                response_data['message'] = 'Failed'
+                response_data['error_key'] = 'error_internal_server'
+                response_data['error_message'] = 'Some fields are missing.'
+                response_data['error_data'] = data
             else:
                 response_data['data'] = data
 
