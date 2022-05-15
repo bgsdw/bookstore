@@ -5,18 +5,11 @@ from rest_framework import serializers
 from bookstore.app.services.file_service import FileService
 
 
-# IMAGE_EXT_CHOICE = (
-#     ('jpg', 'jpg'),
-#     ('png', 'png'),
-#     ('jpeg', 'jpeg')
-# )
-
 class BookSerializer(serializers.ModelSerializer):
     Author_ID = serializers.PrimaryKeyRelatedField(queryset=Author.objects.all(), required=False)
     Cover_URL = serializers.CharField(required=False)
     Cover_Image_Base64 = serializers.CharField(write_only=True)
     Image_Extension = serializers.CharField(write_only=True)
-    # Image_Extension = serializers.ChoiceField(choices=IMAGE_EXT_CHOICE)
 
     class Meta:
         model = Book
