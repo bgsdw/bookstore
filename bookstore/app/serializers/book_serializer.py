@@ -30,3 +30,21 @@ class BookSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'detail': 'Image_Extension should be in jpg, png or jpeg.'})
         validated_data['Cover_URL'] = FileService.base64_to_file(image_base64, f'{validated_data["Title"]}-{timezone.now().timestamp()}.{image_ext}')
         return super().create(validated_data)
+
+class BookUpdateSerializer(BookSerializer):
+    Cover_Image_Base64 = None
+    Image_Extension = None
+
+class BookCoverUpdateSerializer(BookSerializer):
+
+    class Meta:
+        model = Book
+        fields = ['Cover_Image_Base64', 'Image_Extension']
+
+    def update(self, instance, validated_data):
+        image_base64 = validated_data.pop('Cover_Image_Base64')
+        image_ext = validated_data.pop('Image_Extension')
+        if image_ext not in ('jpg', 'png', 'jpeg'):
+            raise serializers.ValidationError({'detail': 'Image_Extension should be in jpg, png or jpeg.'})
+        validated_data['Cover_URL'] = FileService.base64_to_file(image_base64, f'{instance.Title}-{timezone.now().timestamp()}.{image_ext}')
+        return super().update(instance, validated_data)

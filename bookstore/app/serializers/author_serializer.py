@@ -8,6 +8,7 @@ from datetime import timedelta
 
 
 class AuthorSerlializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Author
         exclude = ['Created_Time', 'Is_Disabled']
