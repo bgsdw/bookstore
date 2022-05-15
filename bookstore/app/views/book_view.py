@@ -72,3 +72,13 @@ class BookViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response()
+
+    @atomic
+    @action(detail=False, methods=['put'], url_path='delete/(?P<pk>\d+)')
+    def delete(self, request, pk):
+        try:
+            instance = Book.objects.get(Book_ID=pk, Author_ID=self.request.user.Author_ID)
+        except Book.DoesNotExist:
+            raise exceptions.NotFound()
+        instance.delete()
+        return Response()
