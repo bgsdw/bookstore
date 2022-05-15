@@ -9,7 +9,7 @@ from rest_framework.response import Response
 
 
 class BookViewSet(viewsets.ModelViewSet):
-    queryset = Book.objects.all().order_by('Book_ID')
+    queryset = Book.objects.filter(Author_ID__Is_Disabled=False).order_by('Book_ID')
     serializer_class = BookSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
 

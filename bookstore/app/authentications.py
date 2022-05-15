@@ -37,4 +37,7 @@ class CustomJWTAuthentication(authentication.BaseAuthentication):
         except Author.DoesNotExist:
             raise exceptions.AuthenticationFailed('Author not found.')
 
+        if author.Is_Disabled:
+            raise exceptions.AuthenticationFailed('Account disabled.')
+
         return author, None

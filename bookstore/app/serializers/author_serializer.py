@@ -8,7 +8,7 @@ from datetime import timedelta
 
 
 class AuthorSerlializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Author
         exclude = ['Created_Time', 'Is_Disabled']
@@ -42,6 +42,10 @@ class LoginSerializer(serializers.Serializer):
         # check the password
         if not check_password(validated_data['Password'], author.Password):
             raise exceptions.AuthenticationFailed('Wrong credential.')
+
+        # check author status
+        if author.Is_Disabled:
+            raise exceptions.AuthenticationFailed('Account disabled.')
 
         # set the access token payload
         payload = {
@@ -84,6 +88,10 @@ class ForgotPasswordSerializer(serializers.Serializer):
         except Author.DoesNotExist:
             raise exceptions.AuthenticationFailed('Author not found with this credential.')
 
+        # check author status
+        if author.Is_Disabled:
+            raise exceptions.AuthenticationFailed('Account disabled.')
+
         new_password = 'i0sI988as'
         # update the author password
         author.Password = make_password(new_password)
@@ -108,6 +116,10 @@ class ChangePasswordSerializer(serializers.Serializer):
         if not check_password(validated_data['Old_Password'], author.Password):
             raise exceptions.AuthenticationFailed('Wrong credential.')
 
+        # check author status
+        if author.Is_Disabled:
+            raise exceptions.AuthenticationFailed('Account disabled.')
+
         # update the author password
         author.Password = make_password(validated_data['New_Password'])
         author.save()
@@ -126,6 +138,10 @@ class RefreshTokenSerializer(serializers.Serializer):
             author = Author.objects.get(Email=decoded_token['Email'])
         except Author.DoesNotExist:
             raise exceptions.AuthenticationFailed('Author not found with this credential.')
+
+        # check author status
+        if author.Is_Disabled:
+            raise exceptions.AuthenticationFailed('Account disabled.')
 
         # set the access token payload
         payload = {
