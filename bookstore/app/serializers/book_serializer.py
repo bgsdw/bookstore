@@ -10,10 +10,11 @@ class BookSerializer(serializers.ModelSerializer):
     Cover_URL = serializers.CharField(required=False)
     Cover_Image_Base64 = serializers.CharField(write_only=True)
     Image_Extension = serializers.CharField(write_only=True)
+    Author_Pen_Name = serializers.CharField(source='Author_ID.Pen_Name', read_only=True)
 
     class Meta:
         model = Book
-        fields = '__all__'
+        exclude = ['Created_Time']
 
     def create(self, validated_data):
         validated_data['Author_ID'] = self.context['request'].user
