@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'bookstore.app',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
