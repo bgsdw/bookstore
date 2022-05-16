@@ -11,7 +11,7 @@ class SalesViewSet(viewsets.ModelViewSet):
     serializer_class = SalesSerializer
 
     @atomic
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'], authentication_classes=[])
     def add(self, request):
         serializer = SalesAddSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
