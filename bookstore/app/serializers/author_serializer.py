@@ -57,7 +57,7 @@ class LoginSerializer(serializers.Serializer):
             'exp': timezone.now() + timedelta(minutes=15),
         }
         # create the access token
-        access_token = JWTService.encode_token(payload)
+        access_token = JWTService.encode_token(payload, True)
         
         # set the refresh token payload
         payload = {
@@ -69,7 +69,7 @@ class LoginSerializer(serializers.Serializer):
             'exp': timezone.now() + timedelta(days=1),
         }
         # create the refresh token
-        refresh_token = JWTService.encode_token(payload)
+        refresh_token = JWTService.encode_token(payload, False)
 
         # return the access token and refresh token
         return {
@@ -153,7 +153,7 @@ class RefreshTokenSerializer(serializers.Serializer):
             'exp': timezone.now() + timedelta(minutes=15),
         }
         # create the access token
-        access_token = JWTService.encode_token(payload)
+        access_token = JWTService.encode_token(payload, True)
         
         # set the refresh token payload
         payload = {
@@ -165,7 +165,7 @@ class RefreshTokenSerializer(serializers.Serializer):
             'exp': timezone.now() + timedelta(days=1),
         }
         # create the refresh token
-        refresh_token = JWTService.encode_token(payload)
+        refresh_token = JWTService.encode_token(payload, False)
 
         # return the access token and refresh token
         return {

@@ -27,7 +27,7 @@ def get_token_header(request):
 class CustomJWTAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
         token = get_token_header(request)
-        decoded_token = JWTService.decode_token(token)
+        decoded_token = JWTService.decode_token(token, True)
 
         if decoded_token['token_type'] != 'access':
             raise exceptions.AuthenticationFailed('Token invalid.')
