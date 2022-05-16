@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 class SalesSerializer(serializers.ModelSerializer):
     Created_Time = serializers.SerializerMethodField()
+    Total_Price = serializers.IntegerField(source='Price_Total')
 
     class Meta:
         model = Sales
