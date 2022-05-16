@@ -18,7 +18,6 @@ class BookViewSet(viewsets.ModelViewSet):
     serializer_class = BookSerializer
     filter_backends = [filters.SearchFilter, django_filters.DjangoFilterBackend, filters.OrderingFilter]
     filterset_class = BookFilter
-    # filterset_fields = '__all__'
 
     @atomic
     @action(detail=False, methods=['post'])

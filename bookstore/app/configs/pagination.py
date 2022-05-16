@@ -11,8 +11,6 @@ class CustomPageNumberPagination(PageNumberPagination):
         return Response({
             'List_Data': data,
             'Pagination_Data': {
-                # 'Current_Page': int(self.request.query_params.get('Page', 1)),
-                # 'Current_Page': int(self.request.GET.get('Page', 1)),
                 'Current_Page': self.page.number,
                 'Max_Data_Per_Page': self.page.paginator.per_page,
                 'Max_Page': self.page.paginator.num_pages,
