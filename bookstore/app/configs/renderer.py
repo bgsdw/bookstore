@@ -48,6 +48,11 @@ class CustomJSONRenderer(JSONRenderer):
                 response_data['error_key'] = 'error_internal_server'
                 response_data['error_message'] = 'Some objects are not exist.'
                 response_data['error_data'] = data
+            elif 'That choice is not one of the available choices.' in str(data):
+                response_data['message'] = 'Failed'
+                response_data['error_key'] = 'error_internal_server'
+                response_data['error_message'] = 'Some filter keywords are not valid.'
+                response_data['error_data'] = data
             else:
                 response_data['data'] = data
 
