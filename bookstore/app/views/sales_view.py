@@ -1,14 +1,38 @@
+from datetime import datetime
+
 from bookstore.app.models import Sales
-from bookstore.app.serializers.sales_serializer import SalesAddSerializer, SalesSerializer
+from bookstore.app.serializers.sales_serializer import (SalesAddSerializer,
+                                                        SalesSerializer)
 from django.db.transaction import atomic
-from rest_framework import viewsets, exceptions
+from django.utils.timezone import make_aware
+from django_filters import CharFilter
+from django_filters import rest_framework as django_filters
+from rest_framework import exceptions, filters, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 
+class SalesFilter(django_filters.FilterSet):
+    Created_Time_Start = CharFilter(method='filter_Created_Time_Start')
+    Created_Time_End = CharFilter(method='filter_Created_Time_End')
+    
+    class Meta:
+        model = Sales
+        fields = '__all__'
+
+    def filter_Created_Time_Start(self, queryset, name, value):
+        converted_date = make_aware(datetime.fromtimestamp(int(value)))
+        return queryset.filter(Created_Time__gte=converted_date)
+
+    def filter_Created_Time_End(self, queryset, name, value):
+        converted_date = make_aware(datetime.fromtimestamp(int(value)))
+        return queryset.filter(Created_Time__lte=converted_date)
+
 class SalesViewSet(viewsets.ModelViewSet):
-    queryset = Sales.objects.all()
+    queryset = Sales.objects.all().order_by('Sales_ID')
     serializer_class = SalesSerializer
+    filter_backends = [filters.SearchFilter, django_filters.DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = SalesFilter
 
     @atomic
     @action(detail=False, methods=['post'], authentication_classes=[])

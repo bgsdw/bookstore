@@ -9,6 +9,7 @@ from rest_framework.response import Response
 
 
 class BookFilter(django_filters.FilterSet):
+    
     class Meta:
         model = Book
         exclude = 'Cover_URL'

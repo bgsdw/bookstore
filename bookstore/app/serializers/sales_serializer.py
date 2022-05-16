@@ -3,10 +3,14 @@ from rest_framework import serializers
 
 
 class SalesSerializer(serializers.ModelSerializer):
+    Created_Time = serializers.SerializerMethodField()
 
     class Meta:
         model = Sales
         fields = '__all__'
+
+    def get_Created_Time(self, obj):
+        return int(obj.Created_Time.replace(microsecond=0).timestamp())
 
 
 class SalesAddSerializer(serializers.ModelSerializer):
