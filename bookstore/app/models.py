@@ -14,7 +14,7 @@ class Author(models.Model):
 class Book(models.Model):
     Book_ID = models.AutoField(primary_key=True)
     Title = models.CharField(max_length=255)
-    Author_ID = models.ForeignKey(Author, on_delete=models.RESTRICT)
+    Author_ID = models.ForeignKey(Author, on_delete=models.RESTRICT, db_column='Author_ID')
     Summary = models.CharField(max_length=255)
     Stock = models.PositiveIntegerField()
     Price = models.PositiveIntegerField()
@@ -26,7 +26,7 @@ class Sales(models.Model):
     Recepient_Name = models.CharField(max_length=255)
     Recepient_Email = models.CharField(max_length=255)
     Book_Title = models.CharField(max_length=255)
-    Author_ID = models.ForeignKey(Author, on_delete=models.RESTRICT)
+    Author_ID = models.ForeignKey(Author, on_delete=models.RESTRICT, db_column='Author_ID')
     Quantity = models.PositiveIntegerField()
     Price_Per_Unit = models.PositiveIntegerField()
     Price_Total = models.PositiveIntegerField()
