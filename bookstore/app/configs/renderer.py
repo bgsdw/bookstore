@@ -53,6 +53,16 @@ class CustomJSONRenderer(JSONRenderer):
                 response_data['error_key'] = 'error_internal_server'
                 response_data['error_message'] = 'Some filter keywords are not valid.'
                 response_data['error_data'] = data
+            elif 'List data empty.' in str(data):
+                response_data['data'] = {
+                    'List_Data': [],
+                    'Pagination_Data': {
+                        'Current_Page': 0,
+                        'Max_Data_Per_Page': int(renderer_context['request'].query_params.get('Limit', renderer_context['view'].paginator.page_size)),
+                        'Max_Page': 0,
+                        'Total_All_Data': 0,
+                    },
+                }
             else:
                 response_data['data'] = data
 
