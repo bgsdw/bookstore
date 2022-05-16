@@ -20,6 +20,7 @@ class SalesAddSerializer(serializers.ModelSerializer):
         fields = ['Name', 'Email', 'Quantity', 'Book_ID']
 
     def create(self, validated_data):
+        # prepare the sales data
         book = validated_data.pop('Book_ID')
         validated_data['Recepient_Name'] = validated_data.pop('Name')
         validated_data['Recepient_Email'] = validated_data.pop('Email')
@@ -27,4 +28,14 @@ class SalesAddSerializer(serializers.ModelSerializer):
         validated_data['Author_ID'] = book.Author_ID
         validated_data['Price_Per_Unit'] = book.Price
         validated_data['Price_Total'] = book.Price * validated_data['Quantity']
+
+        # check the book stock
+        if book.Stock == 0:
+            raise serializers.ValidationError({'detail': f'Book stock is empty.'})
+        elif validated_data['Quantity'] > book.Stock:
+            raise serializers.ValidationError({'detail': f'Book stock is only {book.Stock} left.'})
+
+        # update book stock
+        book.Stock = book.Stock - validated_data['Quantity']
+        book.save()
         return super().create(validated_data)
