@@ -33,10 +33,10 @@ class BookViewSet(viewsets.ModelViewSet):
         page = self.paginate_queryset(queryset)
         if page:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response({'List_Data': serializer.data})
+            return self.get_paginated_response(serializer.data)
         
         serializer = self.get_serializer(queryset, many=True)
-        return Response({'List_Data': serializer.data})
+        return Response(serializer.data)
 
     @atomic
     @action(detail=False, methods=['get'])
@@ -45,10 +45,10 @@ class BookViewSet(viewsets.ModelViewSet):
         page = self.paginate_queryset(queryset)
         if page:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response({'List_Data': serializer.data})
+            return self.get_paginated_response(serializer.data)
         
         serializer = self.get_serializer(queryset, many=True)
-        return Response({'List_Data': serializer.data})
+        return Response(serializer.data)
 
     @atomic
     @action(detail=False, methods=['put'], url_path='update/(?P<pk>\d+)')

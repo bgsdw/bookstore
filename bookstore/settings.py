@@ -133,7 +133,6 @@ REST_FRAMEWORK  = {
         'bookstore.app.authentications.CustomJWTAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'bookstore.app.configs.pagination.CustomPageNumberPagination',
-    'PAGE_SIZE': 10,
     'DEFAULT_RENDERER_CLASSES': [
         'bookstore.app.configs.renderer.CustomJSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
