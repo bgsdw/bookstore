@@ -2,16 +2,23 @@ from bookstore.app.models import Book
 from bookstore.app.serializers.book_serializer import (
     BookCoverUpdateSerializer, BookSerializer, BookUpdateSerializer)
 from django.db.transaction import atomic
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as django_filters
 from rest_framework import exceptions, filters, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 
+class BookFilter(django_filters.FilterSet):
+    class Meta:
+        model = Book
+        exclude = 'Cover_URL'
+
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.filter(Author_ID__Is_Disabled=False).order_by('Book_ID')
     serializer_class = BookSerializer
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, django_filters.DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = BookFilter
+    # filterset_fields = '__all__'
 
     @atomic
     @action(detail=False, methods=['post'])

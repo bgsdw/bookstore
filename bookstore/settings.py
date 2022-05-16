@@ -132,6 +132,9 @@ REST_FRAMEWORK  = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'bookstore.app.authentications.CustomJWTAuthentication',
     ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
     'DEFAULT_PAGINATION_CLASS': 'bookstore.app.configs.pagination.CustomPageNumberPagination',
     'DEFAULT_RENDERER_CLASSES': [
         'bookstore.app.configs.renderer.CustomJSONRenderer',
